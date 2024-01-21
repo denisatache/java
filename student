@@ -45,10 +45,10 @@ class Student {
  public void setNote(List<Integer> note) {
  this.note = note;
  }
-• .
+
  public double getMedia()
  {
  return media;
  }
 }
-2. C
+
