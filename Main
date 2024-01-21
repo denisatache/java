@@ -1,0 +1,54 @@
+import java.util.List;
+class Student {
+ private String nume;
+ private String prenume;
+ private int ID;
+ private String CNP;
+ private int varsta;
+ private List<Integer> note;
+ private double media=Double.NaN;
+ 
+ public Student(String nume, String prenume, int ID, String CNP, int varsta, List<Integer> note) {
+ this.nume = nume;
+ this.prenume = prenume;
+ this.ID = ID;
+ this.CNP = CNP;
+ this.varsta = varsta;
+ this.note = note;
+ }
+ 
+ public String getNume() {
+ return nume;
+ }
+ 
+ public void setMedia(double media)
+ {
+ this.media=media;
+ }
+ 
+ public String getPrenume() {
+ return prenume;
+ }
+ public int getID() {
+ return ID;
+ }
+ public String getCNP() {
+ return CNP;
+ }
+ public int getVarsta() {
+ return varsta;
+ }
+ public List<Integer> getNote() {
+ return note;
+ }
+ 
+ public void setNote(List<Integer> note) {
+ this.note = note;
+ }
+• .
+ public double getMedia()
+ {
+ return media;
+ }
+}
+2. C
