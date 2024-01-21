@@ -1,0 +1,103 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+class ReadCSV {
+ public static void main(String[] args) {
+ //Aici am initializat lista de studenti, o variabila care imi retine numele fisierului si separatorul
+ List<Student> studenti = new ArrayList<>();
+ String file = "studenti.csv";
+ String line = "";
+ String csvSplitBy = ",";
+ // Aici am facut citirea primului fisier
+ try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+ //scapam de header
+ line=br.readLine();
+ while ((line = br.readLine()) != null) {
+ String[] student = line.split(csvSplitBy);
+ //Aici am populat lista de studenti cu numele (student[0]),prenumele (student[1]),ID-ul aka 
+nrMatricol(student[2]),CNP-ul(student[3]),varsta,student[4])
+ studenti.add(new Student(student[0], student[1], Integer.parseInt(student[2]), student[3], 
+Integer.parseInt(student[4]), null));
+ }
+ } catch (IOException e) {
+ e.printStackTrace();
+ }
+ //Aici m-am mutat pe al doilea fisier
+ file = "note.csv";
+ //Aici citirea celui de al doilea fisier
+ try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+ //Scapam de header
+ line=br.readLine();
+ while ((line = br.readLine()) != null) {
+ //Am creat un string de note ca sa le preluam din CSV
+ String[] note = line.split(csvSplitBy);
+ //Am declarat id-ul ca fiind primul entry din fisier
+ int ID = Integer.parseInt(note[0]);
+ //Am creat o lista de intregi ca sa sa convertim ulterior notele in int
+ List<Integer> noteList = new ArrayList<>();
+ //Aici m-an dus cu un for de la 1 la cate note sunt
+ for (int i = 1; i < note.length; i++) {
+ //si apoi le-am convertit pe toate in int
+ 
+ noteList.add(Integer.parseInt(note[i]));
+ }
+ //Am luat ID-ul de la fiecare student si l-am comparat cu cel din primul fisier
+ for (Student s : studenti) {
+ if (s.getID() == ID) {
+//si am setat notele
+
+ s.setNote(noteList);
+break;
+ }
+ }
+ }
+ } catch (IOException e) {
+ e.printStackTrace();
+ }
+ // calcularea mediilor si sortarea listei de studenti dupa media notelor
+ for (Student s : studenti) {
+ int sum = 0;
+ boolean esteRestantier = false;
+ for (Integer nota : s.getNote()) {
+ if (nota < 5) {
+ esteRestantier = true;
+break;
+ }
+ sum += nota;
+ }
+ if (!esteRestantier) {
+ s.setMedia((double) sum / s.getNote().size());
+ } else {
+ s.setMedia(Double.NaN);
+ }
+ }
+ Collections.sort(studenti, new Comparator<Student>() {
+ public int compare(Student s1, Student s2) {
+ if (s1.getMedia() != Double.NaN && s2.getMedia() != Double.NaN) {
+ return Double.compare(s2.getMedia(), s1.getMedia());
+ }
+ return 0;
+ }
+ });
+ // afisarea studentilor restantieri
+ System.out.println("Studentii restantieri: ");
+ for (Student s : studenti) {
+ if (s.getMedia() == Double.NaN) {
+ System.out.println("Nume: " + s.getNume() + " Prenume: " + s.getPrenume() + " ID: " + s.getID() + " 
+CNP: " + s.getCNP() + " Varsta: " + s.getVarsta() + " Note: " + s.getNote() + " Media: Fără Medie");
+ }
+ }
+ // afisarea studentilor promovati
+ System.out.println("Studentii promovati: ");
+ for (Student s : studenti) {
+ if (s.getMedia() != Double.NaN) {
+ System.out.println("Nume: " + s.getNume() + " Prenume: " + s.getPrenume() + " ID: " + s.getID() + " 
+CNP: " + s.getCNP() + " Varsta: " + s.getVarsta() + " Note: " + s.getNote() + " Media: " + s.getMedia());
+ }
+ }
+ }
+}
